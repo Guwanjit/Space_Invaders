@@ -15,18 +15,39 @@ pygame.display.set_icon(icon)
 playerImg = pygame.image.load('spaceship.png')
 playerX = 370
 playerY = 480
+playerX_change = 0
 
-def player():
-    screen.blit(playerImg, (playerX, playerY))
+def player(x, y):
+    screen.blit(playerImg, (x, y))
 
 # Game Loop
 running = True
 while running:
+
+    # RGB = Red Green Blue
+    screen.fill((0, 0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # RGB = Red Green Blue
-    screen.fill((0, 0, 0))
-    player()
+    # if keystroke is pressed check whether its right of left
+        if event.type == pygame.KEYDOWN: # pressing the key
+            if event.key == pygame.K_LEFT:
+                playerX_change = -0.2
+            if event.key == pygame.K_RIGHT:
+                playerX_change = 0.2
+
+        if event.type == pygame.KEYUP: # taking finger away from key
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                playerX_change = 0
+
+    playerX += playerX_change
+
+    if playerX <=0:
+        playerX = 0
+    elif playerX >= 736:
+        playerX = 736
+
+    player(playerX, playerY)
     pygame.display.update()
