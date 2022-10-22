@@ -100,6 +100,7 @@ while running:
         fire_bullet(playerX, bulletY)
         bulletY -= bulletY_change
 
+    # bkajhjjd
     player(playerX, playerY)
     enemy(enemyX, enemyY)
 
