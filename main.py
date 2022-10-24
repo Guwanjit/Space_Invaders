@@ -1,4 +1,5 @@
 import pygame
+import math
 import random
 
 # Initialize the pygame
@@ -23,9 +24,9 @@ playerX_change = 0
 
 # Enemy
 enemyImg = pygame.image.load('alien.png')
-enemyX = random.randint(0, 800)
+enemyX = random.randint(0, 735)
 enemyY = random.randint(50, 150)
-enemyX_change = 2
+enemyX_change = 1
 enemyY_change = 40
 
 # Bullets
@@ -36,18 +37,29 @@ bulletX_change = 0
 bulletY_change = 5
 bullet_state = "ready"
 
+score =0
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
+
 
 # commit check
 def enemy(x, y):
     screen.blit(enemyImg, (x, y))
 
-def fire_bullet(x,y):
+
+def fire_bullet(x, y):
     global bullet_state
     bullet_state = "fire"
-    screen.blit(bulletImg, (x+16, y+10))
+    screen.blit(bulletImg, (x + 16, y + 10))
+
+
+def isCollision(enemyX, enemyY, bulletX, bulletY):
+    distance = math.sqrt((math.pow(enemyX - bulletX, 2)) + (math.pow(enemyY - bulletY, 2)))
+    if distance < 27:
+        return True
+    else:
+        return False
 
 
 # Game Loop
@@ -72,6 +84,7 @@ while running:
                 playerX_change = 4
             if event.key == pygame.K_SPACE:
                 if bullet_state is "ready":
+                    # get the current x cordinates of spaceship
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
 
@@ -91,10 +104,10 @@ while running:
     enemyX += enemyX_change
 
     if enemyX <= 0:
-        enemyX_change = 2
+        enemyX_change = 1
         enemyY += enemyY_change
     elif enemyX >= 736:
-        enemyX_change = -2
+        enemyX_change = -1
         enemyY += enemyY_change
 
     # Bullet Movement
@@ -105,6 +118,16 @@ while running:
     if bullet_state is "fire":
         fire_bullet(bulletX, bulletY)
         bulletY -= bulletY_change
+
+    # collision
+    collision = isCollision(enemyX, enemyY, bulletX, bulletY)
+    if collision:
+        bulletY = 480
+        bullet_state = "ready"
+        score += 1
+        print(score)
+        enemyX = random.randint(0, 735)
+        enemyY = random.randint(50, 150)
 
     player(playerX, playerY)
     enemy(enemyX, enemyY)
