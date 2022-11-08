@@ -112,7 +112,7 @@ while running:
     # checking for boundaries of spaceship so it doesn't go out of bonds
     playerX += playerX_change
 
-    if playerX <= 0:
+    if playerX <= 0: # player codinates
         playerX = 0
     elif playerX >= 736:
         playerX = 736
